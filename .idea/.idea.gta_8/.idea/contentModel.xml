@@ -7,7 +7,14 @@
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
         <e p="Scripts" t="Include">
+          <e p="Bullet.cs" t="Include" />
+          <e p="GameManager.cs" t="Include" />
+          <e p="IUnit.cs" t="Include" />
           <e p="Player.cs" t="Include" />
+          <e p="Pool" t="Include">
+            <e p="Pool.cs" t="Include" />
+            <e p="PoolObject.cs" t="Include" />
+          </e>
         </e>
       </e>
       <e p="gta_8.sln" t="IncludeFlat" />
