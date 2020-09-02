@@ -2,7 +2,7 @@
 
 public class PoolObject : MonoBehaviour
 {
-    public void ReturnToPool () {
+    public virtual void ReturnToPool () {
         gameObject.SetActive (false);
     }
 }

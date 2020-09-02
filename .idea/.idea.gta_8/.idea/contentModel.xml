@@ -9,11 +9,15 @@
         <e p="Scripts" t="Include">
           <e p="Bullet.cs" t="Include" />
           <e p="GameManager.cs" t="Include" />
-          <e p="IUnit.cs" t="Include" />
-          <e p="Player.cs" t="Include" />
           <e p="Pool" t="Include">
             <e p="Pool.cs" t="Include" />
             <e p="PoolObject.cs" t="Include" />
+          </e>
+          <e p="Units" t="Include">
+            <e p="Enemy.cs" t="Include" />
+            <e p="IUnit.cs" t="Include" />
+            <e p="Player.cs" t="Include" />
+            <e p="Unit.cs" t="Include" />
           </e>
         </e>
       </e>
