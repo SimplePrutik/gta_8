@@ -8,8 +8,7 @@ public class Player : Unit
 {
     public float speed = 2f;
     
-    public static Action OnPlayerDied = delegate {  };
-    public static Action OnPlayerWon = delegate {  };
+    public static Action<string> OnLevelFinished = delegate(string s) {  };
     
     void FixedUpdate()
     {
@@ -18,7 +17,13 @@ public class Player : Unit
         transform.LookAt(targetLocked);
         HpBar();
     }
-
+    
+    protected override void StartGame()
+    {
+        max_health = GameManager.gameManager.GetConfig("player_health");
+        health = max_health;
+        base.StartGame();
+    }
 
     public override void TakeDamage(int damage)
     {
@@ -34,7 +39,7 @@ public class Player : Unit
         var targets = GameObject.FindGameObjectsWithTag("enemy").Where(x => x.activeInHierarchy).ToArray();
         if (targets.Length == 0)
         {
-            OnPlayerWon();
+            OnLevelFinished("Continue");
             ReturnToPool();
         }
         targetLocked = targets.OrderBy(x => Vector3.Distance(x.transform.position, transform.position))
@@ -74,6 +79,6 @@ public class Player : Unit
     public override void Die()
     {
         ReturnToPool();
-        OnPlayerDied();
+        OnLevelFinished("Restart");
     }
 }

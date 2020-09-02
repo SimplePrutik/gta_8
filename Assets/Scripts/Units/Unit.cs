@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Unit : PoolObject, IUnit
 {
-    protected int max_health = 5;
-    protected int health = 5;
+    protected int max_health;
+    protected int health;
     /// <summary>
     /// Target aimed by the unit
     /// </summary>
@@ -21,10 +21,11 @@ public class Unit : PoolObject, IUnit
 
     public SpriteRenderer hp;
     
-    protected void StartGame()
+    protected virtual void StartGame()
     {
         LockOnto();
         StartCoroutine(Shooting());
+        hp.color = new Color(1,0,0, Mathf.Max(0, 1.0f * health / max_health));
     }
     
     

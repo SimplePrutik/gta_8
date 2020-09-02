@@ -20,7 +20,14 @@ public class Enemy : Unit
         transform.LookAt(targetLocked);
         HpBar();
     }
-    
+
+    protected override void StartGame()
+    {
+        max_health = GameManager.gameManager.GetConfig("enemy_health");
+        health = max_health;
+        base.StartGame();
+    }
+
     public override void LockOnto()
     {
         targetLocked = GameObject.FindGameObjectWithTag("player").transform;
@@ -30,6 +37,13 @@ public class Enemy : Unit
     {
         ReturnToPool();
         OnEnemyDied(transform);
+    }
+    
+    
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        Player.OnLevelFinished += s => ReturnToPool();
     }
     
 }

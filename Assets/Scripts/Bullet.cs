@@ -34,4 +34,10 @@ public class Bullet : PoolObject
         GetComponent<Rigidbody>().Sleep();
         base.ReturnToPool();
     }
+
+    private void OnEnable()
+    {
+        Player.OnLevelFinished += s => ReturnToPool();
+    }
+
 }

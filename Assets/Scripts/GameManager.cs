@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
@@ -30,15 +31,19 @@ public class GameManager : MonoBehaviour
     
     public Action OnLevelStarted = delegate {  };
 
+    public GameObject UI;
+    public Text UIText;
+
     void ResetSpawnMatrix()
     {
         spawn_matrix = spawn_matrix.Select(x => false).ToList();
     }
 
-    void LevelSpawn(int level)
+    public void LevelSpawn()
     {
+        UI.SetActive(false);
         ResetSpawnMatrix();
-        var amount = GetConfig($"level{level}_enemy_amount");
+        var amount = GetConfig($"level{current_level}_enemy_amount");
         for (int i = 0; i < amount + 1; ++i)
         {
             //free spawn locations
@@ -49,11 +54,13 @@ public class GameManager : MonoBehaviour
             
             //choose random from those
             var free_point = free_space[Random.Range(0, free_space.Count)];
+            spawn_matrix[free_point] = true;
             var transform_point = arena.position + Vector3.up + PositionToTransformPoint(free_point);;
             Debug.Log($"Free point = {free_point}, transform point = {transform_point.ToString()}");
             var unit = GetObject(i == amount ? "player" : "enemy");
             unit.transform.position = transform_point;
         }
+        OnLevelStarted();
     }
 
     //matrix of points: -2 to 2 horizontal and -4 to 4 vertical
@@ -109,9 +116,13 @@ public class GameManager : MonoBehaviour
         return result;
     }
 
-    void LoadLevel(int level)
+    private int current_level = 1;
+
+    void OpenUI(string message)
     {
-        
+        UI.SetActive(true);
+        UIText.text = message;
+        current_level = message.Equals("Continue") ? current_level % 2 + 1 : 1;
     }
     
     private void Awake()
@@ -124,17 +135,16 @@ public class GameManager : MonoBehaviour
         }
         spawn_matrix = Enumerable.Repeat(false, GetConfig("spawn_matrix_width") * GetConfig("spawn_matrix_height")).ToList();
         PoolsInit();
-        LevelSpawn(1);
-        OnLevelStarted();
+        LevelSpawn();
     }
 
     private void OnEnable()
     {
-        // Player.OnPlayerDied += LoadLevel(1);
+        Player.OnLevelFinished += OpenUI;
     }
 
     private void OnDisable()
     {
-        throw new NotImplementedException();
+        Player.OnLevelFinished -= OpenUI;
     }
 }
